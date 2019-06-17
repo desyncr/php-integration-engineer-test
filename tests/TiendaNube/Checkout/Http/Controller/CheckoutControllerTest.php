@@ -14,9 +14,55 @@ use Psr\Http\Message\StreamInterface;
 use TiendaNube\Checkout\Http\Request\RequestStackInterface;
 use TiendaNube\Checkout\Http\Response\ResponseBuilderInterface;
 use TiendaNube\Checkout\Service\Shipping\AddressService;
+use TiendaNube\Checkout\Service\Shipping\AddressServiceLegacy;
+use TiendaNube\Checkout\Service\Shipping\AddressServiceProvider;
+use TiendaNube\Checkout\Service\Shipping\AddressServiceInterface;
+use TiendaNube\Checkout\Service\Store\StoreService;
+use Psr\Log\LoggerInterface;
+
+use TiendaNube\Checkout\Model\Address;
+use TiendaNube\Checkout\Model\Store;
 
 class CheckoutControllerTest extends TestCase
 {
+
+    public function testUseAddressServiceForBetaTesters()
+    {
+        // expected store
+        $store = new Store();
+        $store->enableBetaTesting();
+
+        // mocking pdo
+        $pdo = $this->createMock(\PDO::class);
+
+        // mocking logger
+        $logger = $this->createMock(LoggerInterface::class);
+
+        $addressServiceProvider = new AddressServiceProvider($pdo, $logger);
+        
+        // asserts
+        $this->assertInstanceOf(AddressServiceInterface::class, $addressServiceProvider->getService($store));
+        $this->assertInstanceOf(AddressService::class, $addressServiceProvider->getService($store));
+    }
+
+    public function testUseAddressServiceLegacyForNonBetaTesters()
+    {
+        // expected store
+        $store = new Store();
+        $store->disableBetaTesting();
+
+        // mocking pdo
+        $pdo = $this->createMock(\PDO::class);
+
+        // mocking logger
+        $logger = $this->createMock(LoggerInterface::class);
+
+        $addressServiceProvider = new AddressServiceProvider($pdo, $logger);
+        
+        // asserts
+        $this->assertInstanceOf(AddressServiceInterface::class, $addressServiceProvider->getService($store));
+        $this->assertInstanceOf(AddressServiceLegacy::class, $addressServiceProvider->getService($store));
+    }
 
     public function testGetAddressValid()
     {
@@ -24,22 +70,36 @@ class CheckoutControllerTest extends TestCase
         $controller = $this->getControllerInstance();
 
         // expected address
-        $address = [
-            'address' => 'Avenida da França',
-            'neighborhood' => 'Comércio',
-            'city' => 'Salvador',
-            'state' => 'BA',
-        ];
+        $address = Address::fromArray(
+            [
+                'address' => 'Avenida da França',
+                'neighborhood' => 'Comércio',
+                'city' => 'Salvador',
+                'state' => 'BA',
+            ]
+        );
+
+        // expected store
+        $store = new Store();
+        $store->isBetaTester(false);
+
+        // mocking the store service
+        $storeService = $this->createMock(StoreService::class);
+        $storeService->method('getCurrentStore')->willReturn($store);
 
         // mocking the address service
         $addressService = $this->createMock(AddressService::class);
         $addressService->method('getAddressByZip')->willReturn($address);
 
+        // mocking the address service provider
+        $addressServiceProvider = $this->createMock(AddressServiceProvider::class);
+        $addressServiceProvider->method('getService')->willReturn($addressService);
+
         // test
-        $result = $controller->getAddressAction('40010000',$addressService);
+        $result = $controller->getAddressAction('40010000', $storeService, $addressServiceProvider);
 
         // asserts
-        $this->assertEquals(json_encode($address),$result->getBody()->getContents());
+        $this->assertEquals(json_encode($address->toArray()),$result->getBody()->getContents());
         $this->assertEquals(200,$result->getStatusCode());
     }
 
@@ -48,12 +108,24 @@ class CheckoutControllerTest extends TestCase
         // getting controller instance
         $controller = $this->getControllerInstance();
 
-        // mocking address service
+        // expected store
+        $store = new Store();
+        $store->isBetaTester(false);
+
+        // mocking the store service
+        $storeService = $this->createMock(StoreService::class);
+        $storeService->method('getCurrentStore')->willReturn($store);
+
+        // mocking the address service
         $addressService = $this->createMock(AddressService::class);
         $addressService->method('getAddressByZip')->willReturn(null);
 
+        // mocking the address service provider
+        $addressServiceProvider = $this->createMock(AddressServiceProvider::class);
+        $addressServiceProvider->method('getService')->willReturn($addressService);
+
         // test
-        $result = $controller->getAddressAction('400100001',$addressService);
+        $result = $controller->getAddressAction('400100001', $storeService, $addressServiceProvider);
 
         // asserts
         $this->assertEquals(404,$result->getStatusCode());
