@@ -18,24 +18,43 @@ use Psr\Log\LoggerInterface;
  */
 class AddressServiceProvider
 {
-    private $pdo;
+    /**
+     * The database connection link
+     *
+     * @var \PDO
+     */
+    private $connection;
+
+    /** @var LoggerInterface */
     private $logger;
 
     /**
      * Pulling out dependencies for both AddressService and AddressServiceLegacy.
      */
-    public function __construct(\PDO $pdo, LoggerInterface $logger)
+    public function __construct(\PDO $connection, LoggerInterface $logger)
     {
-        $this->pdo = $pdo;
+        $this->connection = $connection;
         $this->logger = $logger;
     }
 
     /**
-     * Pulling out dependencies for both AddressService and AddressServiceLegacy.
+     * Returns either an AddressService or an AddressServiceLegacy instance.
+     *
+     * @return AddressServiceInterface
      */
     public function getService(Store $store): AddressServiceInterface
     {
-        return $store->isBetaTester() ?
-                new AddressService($this->logger) : new AddressServiceLegacy($this->pdo, $this->logger);
+        if ($store->isBetaTester()) {            
+            $addressService = new AddressService(
+                (new AddressServiceClientProvider())->getClient(),
+                $this->logger)
+            ;
+
+        } else {
+            $addressService = new AddressServiceLegacy($this->connection, $this->logger);
+
+        }
+
+        return $addressService;
     }
 }

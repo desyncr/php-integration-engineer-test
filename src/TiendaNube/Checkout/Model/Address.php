@@ -91,4 +91,18 @@ class Address
 
         return $address;
     }
+
+    /**
+     * Helper method to transform an object into a Address instance.
+     */
+    static public function fromObject(\stdClass $properties):Address {
+        $address = new Address();
+
+        $address->setAddress($properties->address);
+        $address->setNeighborhood($properties->neighborhood);
+        $address->setCity($properties->city->name);
+        $address->setState($properties->state->acronym);
+
+        return $address;
+    }
 }

@@ -81,7 +81,7 @@ class CheckoutControllerTest extends TestCase
 
         // expected store
         $store = new Store();
-        $store->isBetaTester(false);
+        $store->disableBetaTesting();
 
         // mocking the store service
         $storeService = $this->createMock(StoreService::class);
@@ -110,7 +110,7 @@ class CheckoutControllerTest extends TestCase
 
         // expected store
         $store = new Store();
-        $store->isBetaTester(false);
+        $store->disableBetaTesting();
 
         // mocking the store service
         $storeService = $this->createMock(StoreService::class);
@@ -130,6 +130,45 @@ class CheckoutControllerTest extends TestCase
         // asserts
         $this->assertEquals(404,$result->getStatusCode());
         $this->assertEquals('{"error":"The requested zipcode was not found."}',$result->getBody()->getContents());
+    }
+
+    public function testGetAddressValidAddressServiceProvider()
+    {
+        // getting controller instance
+        $controller = $this->getControllerInstance();
+
+        // expected address
+        $address = Address::fromArray(
+            [
+                'address' => 'Avenida da França',
+                'neighborhood' => 'Comércio',
+                'city' => 'Salvador',
+                'state' => 'BA',
+            ]
+        );
+
+        // expected store
+        $store = new Store();
+        $store->enableBetaTesting();
+
+        // mocking the store service
+        $storeService = $this->createMock(StoreService::class);
+        $storeService->method('getCurrentStore')->willReturn($store);
+
+        // mocking the address service
+        $addressService = $this->createMock(AddressService::class);
+        $addressService->method('getAddressByZip')->willReturn($address);
+
+        // mocking the address service provider
+        $addressServiceProvider = $this->createMock(AddressServiceProvider::class);
+        $addressServiceProvider->method('getService')->willReturn($addressService);
+
+        // test
+        $result = $controller->getAddressAction('40010000', $storeService, $addressServiceProvider);
+
+        // asserts
+        $this->assertEquals(json_encode($address->toArray()),$result->getBody()->getContents());
+        $this->assertEquals(200,$result->getStatusCode());
     }
 
     /**

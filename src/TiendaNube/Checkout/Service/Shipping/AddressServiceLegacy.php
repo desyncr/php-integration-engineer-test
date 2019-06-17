@@ -22,6 +22,7 @@ class AddressServiceLegacy implements AddressServiceInterface
      */
     private $connection;
 
+    /** @var LoggerInterface */
     private $logger;
 
     /**

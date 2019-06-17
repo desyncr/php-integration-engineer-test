@@ -14,5 +14,10 @@ use TiendaNube\Checkout\Model\Store;
  */
 interface AddressServiceProviderInterface
 {
+	/**
+     * Returns either an AddressService or an AddressServiceLegacy instance.
+     *
+     * @return AddressServiceInterface
+     */
     public function getService(Store $store) : AddressService
 }
