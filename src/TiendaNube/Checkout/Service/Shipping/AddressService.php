@@ -48,15 +48,20 @@ class AddressService
      *
      * @param string $zip
      * @return bool|array
+     * @throws \InvalidArgumentException
      */
     public function getAddressByZip(string $zip): ?array
-    {
-        $this->logger->debug('Getting address for the zipcode [' . $zip . '] from database');
+    {        
+        if (!$zipcode = $this->filterZipcode($zip)) {
+            throw new \InvalidArgumentException('Invalid or badly formated zipcode given.');
+        }
+
+        $this->logger->debug('Getting address for the zipcode [' . $zipcode . '] from database');
 
         try {
             // getting the address from database
-            $stmt = $this->connection->prepare('SELECT * FROM `addresses` WHERE `zipcode` = ?');
-            $stmt->execute([$zip]);
+            $stmt = $this->connection->prepare('SELECT address, neighborhood, city, state FROM `addresses` WHERE `zipcode` = ?');
+            $stmt->execute([$zipcode]);
 
             // checking if the address exists
             if ($stmt->rowCount() > 0) {
@@ -72,5 +77,14 @@ class AddressService
 
             return null;
         }
+    }
+
+    /**
+     * Returns a zipcode as int.
+     * @return string
+     */
+    protected function filterZipcode(string $zip): ?string
+    {
+        return preg_replace("/[^\d]/","", $zip);
     }
 }
