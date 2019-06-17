@@ -60,7 +60,8 @@ abstract class AbstractController
      *
      * @return ServerRequestInterface
      */
-    protected function getCurrentRequest():ServerRequestInterface {
+    protected function getCurrentRequest():ServerRequestInterface
+    {
         return $this->requestStack->getCurrentRequest();
     }
 
@@ -69,7 +70,8 @@ abstract class AbstractController
      *
      * @return ContainerInterface
      */
-    protected function getContainer():ContainerInterface {
+    protected function getContainer():ContainerInterface
+    {
         return $this->container;
     }
 
@@ -81,7 +83,8 @@ abstract class AbstractController
      * @param array $headers
      * @return ResponseInterface
      */
-    protected function json(array $data, int $status = 200, array $headers = []):ResponseInterface {
-        return $this->responseBuilder->buildResponse(json_encode($data),$status,$headers);
+    protected function json(array $data, int $status = 200, array $headers = []):ResponseInterface
+    {
+        return $this->responseBuilder->buildResponse(json_encode($data), $status, $headers);
     }
 }

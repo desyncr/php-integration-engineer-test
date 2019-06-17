@@ -44,15 +44,14 @@ class AddressServiceProvider
      */
     public function getService(Store $store): AddressServiceInterface
     {
-        if ($store->isBetaTester()) {            
+        if ($store->isBetaTester()) {
             $addressService = new AddressService(
                 (new AddressServiceClientProvider())->getClient(),
-                $this->logger)
+                $this->logger
+            )
             ;
-
         } else {
             $addressService = new AddressServiceLegacy($this->connection, $this->logger);
-
         }
 
         return $addressService;

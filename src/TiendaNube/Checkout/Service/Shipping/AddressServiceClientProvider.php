@@ -9,13 +9,14 @@ use GuzzleHttp\ClientInterface;
 
 /**
  * Class AddressServiceClientProvider
- * 
+ *
  * This class aims to provide a single point to configure the AddressServices'
  * HTTP client configuration.
  *
  * @package TiendaNube\Checkout\Service\Shipping
  */
-class AddressServiceClientProvider {
+class AddressServiceClientProvider
+{
 
     private const BASE_URL = 'https://shipping.tiendanube.com/v1/';
 

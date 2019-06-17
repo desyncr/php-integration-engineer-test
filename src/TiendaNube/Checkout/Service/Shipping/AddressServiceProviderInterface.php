@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TiendaNube\Checkout\Service\Shipping; 
+namespace TiendaNube\Checkout\Service\Shipping;
 
 use TiendaNube\Checkout\Service\Shipping\AddressService;
 use TiendaNube\Checkout\Model\Store;
@@ -14,7 +14,7 @@ use TiendaNube\Checkout\Model\Store;
  */
 interface AddressServiceProviderInterface
 {
-	/**
+    /**
      * Returns either an AddressService or an AddressServiceLegacy instance.
      *
      * @return AddressServiceInterface

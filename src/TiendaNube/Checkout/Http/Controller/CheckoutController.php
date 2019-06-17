@@ -28,7 +28,8 @@ class CheckoutController extends AbstractController
      * @param AddressServiceProvider $addressServiceProvider
      * @return ResponseInterface
      */
-    public function getAddressAction(string $zipcode, StoreService $storeService, AddressServiceProvider $addressServiceProvider):ResponseInterface {
+    public function getAddressAction(string $zipcode, StoreService $storeService, AddressServiceProvider $addressServiceProvider):ResponseInterface
+    {
         
         // We always have a 'store' available so we retrieve our AddressService for a Store.
         $address = $addressServiceProvider
@@ -43,6 +44,6 @@ class CheckoutController extends AbstractController
         }
 
         // returning the error when not found
-        return $this->json(['error'=>'The requested zipcode was not found.'],404);
+        return $this->json(['error'=>'The requested zipcode was not found.'], 404);
     }
 }

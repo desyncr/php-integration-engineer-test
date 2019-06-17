@@ -41,7 +41,7 @@ class AddressServiceLegacy implements AddressServiceInterface
      * @inheritDoc
      */
     public function getAddressByZip(string $zip): ?Address
-    {    
+    {
         if (!$zipcode = $this->filterZipcode($zip)) {
             throw new \InvalidArgumentException('Invalid or badly formated zipcode given.');
         }
@@ -61,7 +61,6 @@ class AddressServiceLegacy implements AddressServiceInterface
             }
 
             return null;
-
         } catch (\PDOException $ex) {
             $this->logger->error(
                 'An error occurred at try to fetch the address from the database, exception with message was caught: ' .
@@ -78,6 +77,6 @@ class AddressServiceLegacy implements AddressServiceInterface
      */
     protected function filterZipcode(string $zip): ?string
     {
-        return preg_replace("/[^\d]/","", $zip);
+        return preg_replace("/[^\d]/", "", $zip);
     }
 }

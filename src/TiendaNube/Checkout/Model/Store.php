@@ -44,7 +44,8 @@ class Store
      *
      * @return int
      */
-    public function getId():int {
+    public function getId():int
+    {
         return $this->id;
     }
 
@@ -53,7 +54,8 @@ class Store
      *
      * @param string $name
      */
-    public function setName(string $name):void {
+    public function setName(string $name):void
+    {
         $this->name = $name;
     }
 
@@ -62,7 +64,8 @@ class Store
      *
      * @return string
      */
-    public function getName():string {
+    public function getName():string
+    {
         return $this->name;
     }
 
@@ -71,7 +74,8 @@ class Store
      *
      * @param string $email
      */
-    public function setEmail(string $email):void {
+    public function setEmail(string $email):void
+    {
         $this->email = $email;
     }
 
@@ -79,7 +83,8 @@ class Store
      * Get the current store e-mail address
      * @return string
      */
-    public function getEmail():string {
+    public function getEmail():string
+    {
         return $this->email;
     }
 
@@ -88,21 +93,24 @@ class Store
      *
      * @return bool
      */
-    public function isBetaTester():bool {
+    public function isBetaTester():bool
+    {
         return $this->betaTester;
     }
 
     /**
      * Enables store beta testing
      */
-    public function enableBetaTesting():void {
+    public function enableBetaTesting():void
+    {
         $this->betaTester = true;
     }
 
     /**
      * Disables store beta testing
      */
-    public function disableBetaTesting():void {
+    public function disableBetaTesting():void
+    {
         $this->betaTester = false;
     }
 }

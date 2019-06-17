@@ -34,42 +34,51 @@ class Address
     /**
      * @return string
      */
-    public function getAddress():string {
+    public function getAddress():string
+    {
         return $this->address;
     }
 
-    public function setAddress(string $address) {
+    public function setAddress(string $address)
+    {
         $this->address = $address;
     }
 
-    public function getNeighborhood():string {
+    public function getNeighborhood():string
+    {
         return $this->neighborhood;
     }
 
-    public function setNeighborhood(string $neighborhood) {
+    public function setNeighborhood(string $neighborhood)
+    {
         $this->neighborhood = $neighborhood;
     }
 
-    public function getCity():string {
+    public function getCity():string
+    {
         return $this->city;
     }
 
-    public function setCity(string $city) {
+    public function setCity(string $city)
+    {
         $this->city = $city;
     }
 
-    public function getState():string {
+    public function getState():string
+    {
         return $this->state;
     }
 
-    public function setState(string $state) {
+    public function setState(string $state)
+    {
         $this->state = $state;
     }
 
     /**
      * Helper method to "publish" certain properties from this model.
      */
-    public function toArray():array {
+    public function toArray():array
+    {
         return [
             'address' => $this->address,
             'neighborhood' => $this->neighborhood,
@@ -81,7 +90,8 @@ class Address
     /**
      * Helper method to transform an array into a Address instance.
      */
-    static public function fromArray(array $properties):Address {
+    public static function fromArray(array $properties):Address
+    {
         $address = new Address();
         // We're assuming these properties DO exists and they're safe to use.
         $address->setAddress($properties['address']);
@@ -95,7 +105,8 @@ class Address
     /**
      * Helper method to transform an object into a Address instance.
      */
-    static public function fromObject(\stdClass $properties):Address {
+    public static function fromObject(\stdClass $properties):Address
+    {
         $address = new Address();
 
         $address->setAddress($properties->address);

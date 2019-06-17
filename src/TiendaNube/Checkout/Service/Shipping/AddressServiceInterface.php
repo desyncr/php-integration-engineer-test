@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TiendaNube\Checkout\Service\Shipping; 
+namespace TiendaNube\Checkout\Service\Shipping;
 
 use TiendaNube\Checkout\Model\Address;
 
@@ -29,5 +29,5 @@ interface AddressServiceInterface
      * @return bool|array
      * @throws \InvalidArgumentException
      */
-	public function getAddressByZip(string $zip) : ?Address;
+    public function getAddressByZip(string $zip) : ?Address;
 }

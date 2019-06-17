@@ -28,7 +28,7 @@ class AddressServiceTest extends TestCase
 
         // mocking logger
         $logger = $this->createMock(LoggerInterface::class);
-                
+
         $body =  Psr7\stream_for('{
             "altitude":7.0,
             "cep":"40010000",
@@ -36,12 +36,12 @@ class AddressServiceTest extends TestCase
             "longitude":"-38.5101976",
             "address":"Avenida da França",
             "neighborhood":"Comércio",
-            "city":{  
+            "city":{
                 "ddd":71,
                 "ibge":"2927408",
                 "name":"Salvador"
             },
-            "state":{  
+            "state":{
                 "acronym":"BA"
             }
         }');
@@ -69,7 +69,7 @@ class AddressServiceTest extends TestCase
     {
         // mocking logger
         $logger = $this->createMock(LoggerInterface::class);
-       
+
         // Create a mock and queue two responses.
         $mock = new MockHandler([
             new Response(404)
@@ -92,7 +92,7 @@ class AddressServiceTest extends TestCase
     {
         // mocking logger
         $logger = $this->createMock(LoggerInterface::class);
-       
+
         // Create a mock and queue two responses.
         $mock = new MockHandler([
             new Response(500)

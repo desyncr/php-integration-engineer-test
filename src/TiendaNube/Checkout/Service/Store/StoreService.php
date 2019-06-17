@@ -10,10 +10,12 @@ use TiendaNube\Checkout\Model\Store;
  */
 class StoreService implements StoreServiceInterface
 {
-	/**
+    /**
      * Get the current store instance
      *
      * @return Store
      */
-    public function getCurrentStore() : Store {}
+    public function getCurrentStore() : Store
+    {
+    }
 }

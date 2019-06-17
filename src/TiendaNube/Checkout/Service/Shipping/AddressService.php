@@ -42,7 +42,7 @@ class AddressService implements AddressServiceInterface
     public function getAddressByZip(string $zip): ?Address
     {
         $headers = [
-            'Authorization' => 'Bearer ' . self::TOKEN,        
+            'Authorization' => 'Bearer ' . self::TOKEN,
             'Accept'        => 'application/json',
         ];
 
@@ -54,11 +54,9 @@ class AddressService implements AddressServiceInterface
             if ($response->getStatusCode() == 200) {
                 return Address::fromObject(json_decode($response->getBody()->getContents()));
             }
-            
         } catch (\Exception $e) {
-
             $this->logger->error('Failed to retrieve result from client: ' . $e->getMessage());
-            
+
             return null;
         }
 
