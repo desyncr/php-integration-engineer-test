@@ -18,5 +18,5 @@ interface StoreServiceInterface
      *
      * @return Store
      */
-    public function getCurrentStore():Store;
+    public function getCurrentStore() : Store;
 }
